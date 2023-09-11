@@ -1,3 +1,6 @@
 /data/*
 *.npy
 *.ipynb_checkpoints
+/trained_models/nn_1LSTM_3RB_1LSTM_small/
+/trained_models/nn_1LSTM_3RB_1LSTM_tuned1/
+/trained_models/eval_results/
