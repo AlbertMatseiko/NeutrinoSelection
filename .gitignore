@@ -1,4 +1,4 @@
-/data/*
+/data/*.h5
 *.npy
 *.ipynb_checkpoints
 /trained_models/nn_1LSTM_3RB_1LSTM_small/

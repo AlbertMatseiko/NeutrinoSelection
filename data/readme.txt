@@ -1,0 +1,1 @@
+Here data of Baikal-GVD experiments should be contained in properely prepared HDF5 files.
