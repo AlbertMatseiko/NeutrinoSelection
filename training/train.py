@@ -2,8 +2,8 @@ from datetime import datetime
 import h5py as h5
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from ds_making import make_dataset
-import losses
+from training.ds_making import make_dataset
+import training.losses
 
 def train_model(model, path_to_h5, batch_size, lr_initial, model_name, shape, num_of_epochs = 200, verbose = 0):
     with h5.File(path_to_h5, 'r') as hf:
@@ -18,7 +18,7 @@ def train_model(model, path_to_h5, batch_size, lr_initial, model_name, shape, nu
     lr = tf.keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=lr_initial, decay_steps=decay_steps,
                                                         decay_rate=decay_rate)
     optimizer = tf.keras.optimizers.Adam(lr, beta_1=0.9, beta_2=0.999, epsilon=1e-07, amsgrad=False, name='Adam')
-    model.compile(optimizer=optimizer, loss=losses.focal_loss(2., 2., 10., 1.),
+    model.compile(optimizer=optimizer, loss=training.losses.focal_loss(2., 2., 10., 1.),
                   weighted_metrics=[],
                   metrics=[tf.keras.metrics.Recall(class_id=1, name='E_0.5', dtype = tf.float64),
                            tf.keras.metrics.Recall(class_id=0, name='1-S_0.5', dtype = tf.float64),

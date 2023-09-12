@@ -1,6 +1,6 @@
 import tensorflow as tf
 import tensorflow.keras.layers as tfl
-from nn_constructor import *
+from nn_builds.nn_constructor import *
 
 #LSTM = рекуррентные слои
 #RB = Res-Net Block
