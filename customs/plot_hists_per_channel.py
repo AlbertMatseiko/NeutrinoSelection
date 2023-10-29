@@ -5,6 +5,7 @@ import numpy as np
 # Функция для отрисовки
 def plot_hists(data, len_ev=None,
                title='Params distribution',
+               path_to_data='./data',
                bins=100,
                density=True,
                Q_range=(-0.2, 0.2),
@@ -67,6 +68,6 @@ def plot_hists(data, len_ev=None,
     except:
         pass
         # print('directory for figs already exists')
-    plt.savefig('./dist_figures/' + title + '.png')
+    plt.savefig(path_to_data + '/dist_figures/' + title + '.png')
     plt.close()
     return fig
