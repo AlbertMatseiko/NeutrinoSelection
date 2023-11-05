@@ -40,13 +40,25 @@ except:
 Shape = (None, 6)
 
 # set hyperparams
-lr_initial = 0.003  # tuned
+lr_initial = 0.001  # tuned
 batch_size = 256
 
 # making model
+LOAD = False
+u_list = [160, 11]
+w_mu = 1.
 model_func = getattr(nn, model_name)
-model = model_func(Shape)  # , u_list=[32, 16])
-model_name = input("How do you want to call the model/trial?")
+#model_name = input("How do you want to call the model/trial?")
+model_name = f"{model_name}_bestHP3_wmu{int(w_mu)}"
+if LOAD:
+    try:
+        path_to_model = './trained_models/' + model_name + '/' + 'best'
+        model = tf.keras.models.load_model(path_to_model, compile=False)
+    except OSError:
+        print("Can't load the model, creating new")
+        model = model_func(Shape, u_list=u_list)
+else:
+    model = model_func(Shape, u_list=u_list)  # , u_list=[32, 16])
 # model_name = 'test'
 
 trigger = input("Do you want to see model's summary? Type only 'y' or 'n': \n")
@@ -72,6 +84,6 @@ else:
     v = 0
 
 # training model and creating figs
-history = tr.train_model(model, path_to_h5, batch_size, lr_initial, model_name, shape=Shape,
+history = tr.train_model(model, path_to_h5, batch_size, lr_initial, model_name, w_mu=w_mu, shape=Shape,
                          num_of_epochs=epochs, verbose=v)
 #tr.make_train_figs(history, model_name)

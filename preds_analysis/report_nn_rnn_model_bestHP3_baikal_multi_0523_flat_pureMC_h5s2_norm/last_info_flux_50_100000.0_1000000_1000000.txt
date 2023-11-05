@@ -1,0 +1,3 @@
+Mu number = 5000000.0
+Nu number = 50
+Starts of slices = 1000000, 1000000.

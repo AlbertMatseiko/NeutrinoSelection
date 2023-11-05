@@ -1,0 +1,3 @@
+Critical treshold = [0.9991]
+Level of suppression = [9.2517306e-07]
+Level of exposition = [0.49592783]

@@ -7,7 +7,7 @@ from datetime import datetime
 from customs.ds_making import make_dataset
 
 
-def train_model(model, path_to_h5, batch_size, lr_initial, model_name, shape, num_of_epochs=200, verbose=0, cutting=1):
+def train_model(model, path_to_h5, batch_size, lr_initial, model_name, shape, w_mu=10., w_nu=1., num_of_epochs=200, verbose=0, cutting=1):
     with h5.File(path_to_h5, 'r') as hf:
         total_num = hf['train/ev_ids_corr/data'].shape[0]
         steps_per_epoch = (total_num // batch_size) // cutting
@@ -19,7 +19,7 @@ def train_model(model, path_to_h5, batch_size, lr_initial, model_name, shape, nu
     lr = tf.keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=lr_initial, decay_steps=decay_steps,
                                                         decay_rate=decay_rate)
     optimizer = tf.keras.optimizers.Adam(lr, beta_1=0.9, beta_2=0.999, epsilon=1e-07, amsgrad=False, name='Adam')
-    model.compile(optimizer=optimizer, loss=focal_loss(2., 2., 10., 1.),
+    model.compile(optimizer=optimizer, loss=focal_loss(2., 2., w_mu, w_nu),
                   weighted_metrics=[],
                   metrics=[Expos_on_Suppr(name="expos_on_suppr", max_suppr_value=5e-6, num_of_points=100000),
                            'accuracy'])

@@ -2,7 +2,7 @@
 import os
 import keras_tuner as kt
 import nn
-import tune_proc as TP
+import rnn_tune_proc as TP
 
 
 import tensorflow as tf # tensorflow and GPU

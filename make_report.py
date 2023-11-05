@@ -58,9 +58,10 @@ print("All predictions are loaded!")
 ### SOMETHING GLOBAL ###
 an.N_points = 10000
 an.tr_start, an.tr_end = 0., 1.
+update = True #False
 
 # Get S and E
-an.get_pos_rates(batch_size=2048 * 64)
+an.get_pos_rates(batch_size=2048 * 64, update_positives=update)
 fig = an.plot_SE()
 postfix = f"_{an.N_points}_{an.tr_start}_{an.tr_end}"
 fig.write_html(path_to_report + "/fig_SE" + postfix + ".html")
@@ -83,7 +84,8 @@ start_mu = int(1e6)
 start_nu = int(1e6)
 an.get_NuFromNN(nu_in_flux=nu_in_flux,
                 mu_nu_ratio=mu_nu_ratio,
-                start_mu=start_mu, start_nu=start_nu)
+                start_mu=start_mu, start_nu=start_nu,
+                update_positives=update)
 print("Positives for flux are extracted!")
 print('Mu number =', mu_nu_ratio * nu_in_flux)
 print('True Nu number =', nu_in_flux)

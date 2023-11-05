@@ -52,7 +52,7 @@ class Analysis:
         if path_to_preds is not None:
             assert path_to_preds.endswith(self.regime + '.npy')
 
-    def make_preds(self, shape=(None, 6), bs=2048):
+    def make_preds(self, shape=(None, 6), bs=1024):
         assert self.path_to_h5 is not None
         assert self.model is not None
         with h5.File(self.path_to_h5, mode='r') as hf:
@@ -61,18 +61,18 @@ class Analysis:
         self.proba_nn = self.model.predict(dataset, steps=L // bs)
 
         try:
-            os.makedirs('analysis/predictions')
+            os.makedirs('preds_analysis/predictions')
             print('directory for preds is created')
         except:
             print('directory for preds already exists')
-        self.path_to_preds = './predictions/preds_' + self.mn + '_' + self.regime
+        self.path_to_preds = './preds_analysis/predictions/preds_' + self.mn + '_' + self.regime
         np.save(self.path_to_preds, self.proba_nn)
 
         return self.path_to_preds
 
     def load_preds_and_labels(self):
-        if self.path_to_preds is None:
-            self.path_to_preds = './preds_analysis/predictions/preds_' + self.mn + '_' + self.regime + '.npy'
+        #if self.path_to_preds is None:
+        self.path_to_preds = './preds_analysis/predictions/preds_' + self.mn + '_' + self.regime + '.npy'
         self.proba_nn = np.load(self.path_to_preds)
         with h5.File(self.path_to_h5, 'r') as hf:
             L = self.proba_nn.shape[0]
@@ -183,7 +183,8 @@ class Analysis:
         self.S_test = self.MuPos_test / self.preds_mu_test.shape[0]
         return self.E_test, self.S_test
 
-    def get_NuFromNN(self, nu_in_flux=30, mu_nu_ratio=1e5, start_mu=0, start_nu=0, alpha=1. - 0.68):
+    def get_NuFromNN(self, nu_in_flux=30, mu_nu_ratio=1e5, start_mu=0, start_nu=0, alpha=1. - 0.68,
+                     update_positives: bool = False):
         assert self.preds_mu is not None and self.preds_nu is not None
         self.nu_in_flux = nu_in_flux
         self.mu_nu_ratio = mu_nu_ratio
@@ -201,7 +202,8 @@ class Analysis:
             self.preds_nu_test = np.concatenate([self.preds_nu[start_nu + len_nu:],
                                                  self.preds_nu[0:start_nu]], axis=0)
 
-            self.E_test, self.S_test = self.get_pos_rates_flux(postfix=f"_{nu_in_flux}_{mu_nu_ratio}_{start_mu}_{start_nu}")
+            self.E_test, self.S_test = self.get_pos_rates_flux(postfix=f"_{nu_in_flux}_{mu_nu_ratio}_{start_mu}_{start_nu}",
+                                                               update_positives=update_positives)
 
             ### Формула потока
             n_0 = self.preds_mu_flux.shape[0] + self.preds_nu_flux.shape[0]
